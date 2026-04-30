@@ -70,6 +70,7 @@ By reviewing the filtered traffic, the internal IP communicating with the malici
 
 
 ```wireshark
+Filter : ip.scr == 45.131.214.85
 ip.addr == "10.2.28.88"
 ```
 
@@ -83,7 +84,8 @@ After identifying the infected IP, Ethernet frame details were inspected to dete
 
 The associated MAC address was:
 ```wireshark
-Mac Address infected system: "00:19:d1:b2:4d:ad" 
+Filter : ip.src == 45.131.214.85 (Showed in Ethernet II,src)
+Mac Address infected system: "00:19:d1:b2:4d:ad"
 ```
 ---
 
@@ -94,6 +96,7 @@ To determine the hostname of the infected system, DNS and NBNS traffic were anal
 The hostname was identified as:
 
 ```wireshark
+Filter : nbns and ip.addr == 10.2.28.88
 Host Name:Name: "DESKTOP-TEYQ2NR"
 ```
 
@@ -105,6 +108,7 @@ Initial analysis focused on authentication-related traffic such as SMB/NTLM; how
 
 The user account identified was:
 ```wireshark
+Filter: kerberos.CNameString and ip.addr == 10.2.28.88
 user account name : "brolf"
 ```
 ---
@@ -114,7 +118,9 @@ user account name : "brolf"
 Identifying the full name of the user was challenging. I initially analyzed SMB, HTTP, and Kerberos traffic but did not find relevant information. I then performed a keyword-based search for "Full Name" within the packet capture ultimately revealed the full name associated with the user account.
 
 ```wireshark
+Use Search options:brolf
 Full Name: "Becka Rolf"
+
 ```
 
 - **Infected IP Address: "10.2.28.88"**  
